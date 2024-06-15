@@ -2,19 +2,33 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
+        stage('Cleanup') {
             steps {
-                echo 'Building..'
+                cleanWs()
+            }
+        }
+        stage('Checkout') {
+            steps {
+                checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/techpodium/pipeline-job-test.git']])
             }
         }
         stage('Test') {
             steps {
                 echo 'Testing..'
+                sh 'find ./ -name "*.js" -print0 | xargs -0 /usr/local/bin/jshint > jslint.html || true'
+                archiveArtifacts artifacts: 'jslint.html', followSymlinks: false
+            }
+        }
+        stage('Build') {
+            steps {
+                echo 'Building..'
+                sh 'zip -r artifact.zip . -x ".git/*" -x jslint.html'
+                archiveArtifacts artifacts: 'artifact.zip', followSymlinks: false
             }
         }
         stage('Deploy') {
             steps {
-                echo 'Deploying....'
+                 #TO BE COMPLETED BY YOU
             }
         }
     }
