@@ -9,7 +9,7 @@ pipeline {
         }
         stage('Checkout') {
             steps {
-                checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/techpodium/pipeline-job-test.git']])
+                checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/pukarram001/First_one.git']])
             }
         }
         stage('Test') {
